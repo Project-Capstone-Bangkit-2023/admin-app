@@ -2,11 +2,23 @@ const path = require('path')
 const express = require('express')
 const { engine } = require('express-handlebars')
 const morgan = require('morgan')
+const session = require('express-session')
 const { initRouter } = require('./routes')
 
 const app = express()
 
+if (process.env.NODE_ENV == 'production') {
+  app.set('trust proxy', 1)
+}
+
 app.use(morgan('dev'))
+app.use(session({
+  secret: process.env.SESSION_KEY,
+  resave: false,
+  cookie: {
+    secure: process.env.NODE_ENV == 'production'
+  }
+}))
 
 app.engine('handlebars', engine({
   layoutsDir: path.join(__dirname, 'views', 'layouts'),
