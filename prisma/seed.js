@@ -10,6 +10,7 @@ async function main() {
     create: {
       name: 'Admin',
       email: 'admin@gmail.com',
+      role: "admin",
       password: await bcrypt.hash('1234', 10)
     },
   })
