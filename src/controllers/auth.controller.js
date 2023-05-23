@@ -29,3 +29,12 @@ exports.login = async (req, res) => {
     res.send("Failed")
   }
 }
+
+exports.logout = async (req, res) => {
+  req.session.user = null
+  req.session.save(err => {
+    req.session.regenerate(err => {
+      res.redirect('/auth/login')
+    })
+  })
+}
