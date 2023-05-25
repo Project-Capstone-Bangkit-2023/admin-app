@@ -19,13 +19,55 @@ model User {
   id Int @id @default(autoincrement())
   name String
   email String @unique
-  password String
+  password String?
   role Role @default(user)
   location String?
   age Int?
   cat_pref String?
   created_at DateTime @default(now())
   updated_at DateTime?
+  tourism_rating TourismRating[]
 
   @@map("users")
+}
+
+model Category {
+  id Int @id @default(autoincrement())
+  name String
+  created_at DateTime @default(now())
+  updated_at DateTime?
+
+  @@map("categories")
+}
+
+model Tourism {
+  id Int @id @default(autoincrement())
+  name String
+  picture String @default("default.png")
+  description String @db.Text
+  category String
+  city String
+  price Float @default(0)
+  rating Float @default(0)
+  latitude String
+  longitude String
+  created_at DateTime @default(now())
+  updated_at DateTime?
+  tourism_rating TourismRating[]
+
+  @@map("tourisms")
+}
+
+model TourismRating {
+  id Int @id @default(autoincrement())
+  tourism_id Int
+  user_id Int 
+  rating Float @default(0)
+  review String @db.Text
+  created_at DateTime @default(now())
+  updated_at DateTime?
+  tourism Tourism @relation(fields: [tourism_id], references: [id])
+  user User @relation(fields: [user_id], references: [id])
+
+  @@map("tourism_ratings")
 }
