@@ -63,7 +63,7 @@ model TourismRating {
   tourism_id Int
   user_id Int 
   rating Float @default(0)
-  review String @db.Text
+  review String? @db.Text
   created_at DateTime @default(now())
   updated_at DateTime?
   tourism Tourism @relation(fields: [tourism_id], references: [id])

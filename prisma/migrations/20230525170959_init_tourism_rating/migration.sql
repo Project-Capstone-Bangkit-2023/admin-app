@@ -1,10 +1,16 @@
+-- DropIndex
+DROP INDEX `users_email_key` ON `users`;
+
+-- AlterTable
+ALTER TABLE `users` MODIFY `password` VARCHAR(191) NULL;
+
 -- CreateTable
 CREATE TABLE `tourism_ratings` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `tourism_id` INTEGER NOT NULL,
     `user_id` INTEGER NOT NULL,
     `rating` DOUBLE NOT NULL DEFAULT 0,
-    `review` TEXT NOT NULL,
+    `review` TEXT NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated_at` DATETIME(3) NULL,
 
