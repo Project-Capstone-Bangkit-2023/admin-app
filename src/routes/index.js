@@ -4,8 +4,9 @@ const tourismRouter = require('./partials/api/tourism')
 
 exports.initRouter = app => {
   app.use('/auth', authRouter)
-  app.use('/', dashboardRouter)
-  
+
   // API Routes
   app.use('/api/v1/tourisms', tourismRouter)
+
+  app.use('/', dashboardRouter)
 }

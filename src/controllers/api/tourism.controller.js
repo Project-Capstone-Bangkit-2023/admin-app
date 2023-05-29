@@ -14,15 +14,16 @@ exports.createRating = async (req, res) => {
   try {
     const data = await prisma.tourismRating.create({
       data: {
-        tourism_id: '',
-        user_id: '',
-        rating: '',
-        review: '',
+        tourism_id: Number(req.body.tourism_id),
+        user_id: Number(req.body.user_id), // Should get from token
+        rating: parseFloat(req.body.rating),
+        review: req.body.review,
       }
     })
     res.json({
       status: 'success',
-      data: req.body
+      message: 'Review Created',
+      data,
     })
   } catch (err) {
     res.status(500).json({
@@ -37,16 +38,23 @@ exports.updateRating = async (req, res) => {
   try {
     const data = await prisma.tourismRating.update({
       where: {
-        id: '',
+        id: Number(req.params.tourismId),
       },
       data: {
-        tourism_id: '',
-        user_id: '',
-        rating: '',
-        review: '',
+        rating: parseFloat(req.body.rating),
+        review: req.body.review,
       }
     })
+    res.json({
+      status: 'success',
+      message: 'Review Updated',
+      data,
+    })
   } catch (err) {
-
+    res.status(500).json({
+      status: 'error',
+      message: 'An error has occured.',
+      error: err.message
+    })
   }
 }

@@ -1,6 +1,6 @@
 const { Router } = require('express')
 const { PrismaClient } = require('@prisma/client')
-const { createRating } = require('../../../controllers/api/tourism.controller')
+const { createRating, updateRating } = require('../../../controllers/api/tourism.controller')
 
 const router = Router()
 
@@ -9,8 +9,6 @@ router.get('/', (req, res) => {
 })
 
 router.post('/:tourismId/reviews', createRating)
-router.post('/:tourismId/reviews/:reviewId', (req, res) => {
-
-})
+router.post('/:tourismId/reviews/:reviewId', updateRating)
 
 module.exports = router
