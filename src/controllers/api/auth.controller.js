@@ -62,27 +62,27 @@ exports.login = async (req, res) => {
 // Register
 exports.register = async (req, res) => {
     try {
-        const { name, email, location, age, cat_pref } = req.body;
-        const registerUser = await prisma.user.create({
+        const user = await prisma.user.create({
             data: {
-                name: name,
-                email: email,
-                location: location,
-                age: age,
-                cat_pref: cat_pref,
+                name: req.body.name,
+                email: req.body.email,
+                location: req.body.location,
+                age: req.body.age,
+                cat_pref: req.body.cat_pref,
             },
         });
         const token = await generateJwtToken(registerUser);
         res.json({
             status: 'success',
             message: 'Register succeed',
-            data: { token },
+            data: { token, user },
         });
-    } catch (error) {
-        console.error(error);
-        throw error;
-    } finally {
-        await prisma.$disconnect();
+    } catch (err) {
+        res.status(500).json({
+            status: 'error',
+            message: 'An error has occured.',
+            error: err.message
+        })
     }
 }
 
