@@ -4,6 +4,7 @@ const { engine } = require('express-handlebars')
 const morgan = require('morgan')
 const session = require('express-session')
 const { initRouter } = require('./routes')
+const { onRouteNotFound, onGlobalErrorHandler } = require('./utils/handlers')
 
 const app = express()
 
@@ -34,5 +35,11 @@ app.set('views', path.join(__dirname, 'views/pages'))
 app.use(express.static(path.join(__dirname, '..', 'public')))
 
 initRouter(app)
+
+// Handle error page
+app.use('*', onRouteNotFound())
+
+// Global error handler
+app.use(onGlobalErrorHandler())
 
 module.exports = app

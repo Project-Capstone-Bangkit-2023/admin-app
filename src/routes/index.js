@@ -1,10 +1,11 @@
-const initDashboardRouter = require('./partials/dashboard')
-const initAuthRouter = require('./partials/auth')
+const dashboardRouter = require('./partials/pages/dashboard')
+const authRouter = require('./partials/pages/auth')
+const tourismRouter = require('./partials/api/tourism')
 
 exports.initRouter = app => {
-
-  // Dashboard router
-  initAuthRouter(app)
-  initDashboardRouter(app)
-
+  app.use('/auth', authRouter)
+  app.use('/', dashboardRouter)
+  
+  // API Routes
+  app.use('/api/v1/tourisms', tourismRouter)
 }

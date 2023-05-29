@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs')
 const { PrismaClient } = require('@prisma/client')
-const { authLoginValidator } = require('./../utils/form-validators')
+const { authLoginValidator } = require('../../utils/form-validators')
 
 const prisma = new PrismaClient()
 
@@ -12,7 +12,7 @@ exports.index = (req, res) => {
 
 exports.login = async (req, res) => {
   if (!authLoginValidator(req)) {
-    const user = await prisma.user.findUnique({
+    const user = await prisma.user.findFirst({
       where: {
         email: req.body.email,
       }
