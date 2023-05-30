@@ -2,6 +2,22 @@ const { PrismaClient } = require('@prisma/client')
 
 const prisma = new PrismaClient()
 
+const updateAvgRatingOnTourism = async tourism_id => {
+  const avgRating = await prisma.tourismRating.aggregate({
+    _avg: {
+      rating: true
+    }
+  })
+  await prisma.tourism.update({
+    where: {
+      id: Number(tourism_id),
+    },
+    data: {
+      rating: parseFloat(avgRating._avg.rating)
+    }
+  })
+}
+
 exports.getTourisms = async (req, res) => {
   try {
     const tourism = await prisma.tourism.findMany({
@@ -74,6 +90,7 @@ exports.createRating = async (req, res) => {
         review: req.body.review,
       }
     })
+    await updateAvgRatingOnTourism(req.body.tourism_id)
     res.json({
       status: 'success',
       message: 'Review Created',
@@ -92,13 +109,14 @@ exports.updateRating = async (req, res) => {
   try {
     const data = await prisma.tourismRating.update({
       where: {
-        id: Number(req.params.tourismId),
+        id: Number(req.params.reviewId),
       },
       data: {
         rating: parseFloat(req.body.rating),
         review: req.body.review,
       }
     })
+    await updateAvgRatingOnTourism(data.tourism_id)
     res.json({
       status: 'success',
       message: 'Review Updated',
