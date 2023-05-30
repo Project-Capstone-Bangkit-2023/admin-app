@@ -20,9 +20,26 @@ const updateAvgRatingOnTourism = async tourism_id => {
 
 exports.getTourisms = async (req, res) => {
   try {
-
+    const searchQuery = {}
+    if (req.query.q) {
+      searchQuery.where = {
+        name: {
+          search: req.query.q
+        }
+      }
+    }
+    const data = await prisma.tourism.findMany(searchQuery)
+    res.json({
+      status: 'success',
+      message: 'Get tourism successfully',
+      data,
+    })
   } catch (err) {
-
+    res.status(500).json({
+      status: 'error',
+      message: 'An error has occured.',
+      error: err.message
+    })
   }
 }
 

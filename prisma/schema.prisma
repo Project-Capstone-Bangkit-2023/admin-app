@@ -3,6 +3,7 @@
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
 }
 
 datasource db {
@@ -55,7 +56,8 @@ model Tourism {
   updated_at DateTime?
   tourism_rating TourismRating[]
 
-  @@map("tourisms")
+  @@map("tourisms")  
+  @@fulltext([name])
 }
 
 model TourismRating {
@@ -69,5 +71,6 @@ model TourismRating {
   tourism Tourism @relation(fields: [tourism_id], references: [id])
   user User @relation(fields: [user_id], references: [id])
 
+  @@fulltext([review])
   @@map("tourism_ratings")
 }
