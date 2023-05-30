@@ -1,5 +1,4 @@
 runtime: nodejs
-service: backend
 
 env_variables:
   NODE_ENV: development

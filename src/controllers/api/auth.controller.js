@@ -71,7 +71,7 @@ exports.register = async (req, res) => {
                 cat_pref: req.body.cat_pref,
             },
         });
-        const token = await generateJwtToken(registerUser);
+        const token = await generateJwtToken(user);
         res.json({
             status: 'success',
             message: 'Register succeed',
