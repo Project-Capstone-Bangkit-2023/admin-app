@@ -20,7 +20,11 @@ const updateAvgRatingOnTourism = async tourism_id => {
 
 exports.getTourisms = async (req, res) => {
   try {
-    const searchQuery = {}
+    const searchQuery = {
+      include: {
+        tourism_rating: true
+      },
+    }
     if (req.query.q) {
       searchQuery.where = {
         name: {
@@ -28,11 +32,52 @@ exports.getTourisms = async (req, res) => {
         }
       }
     }
-    const data = await prisma.tourism.findMany(searchQuery)
+    let data = await prisma.tourism.findMany(searchQuery)
+    data = data.map((tourism) => ({
+      id: tourism.id,
+      name: tourism.name,
+      picture: tourism.picture,
+      description: tourism.description,
+      category: tourism.category,
+      city: tourism.city,
+      price: tourism.price,
+      rating: tourism.rating,
+      latitude: tourism.latitude,
+      longitude: tourism.longitude,
+      countRating: tourism.tourism_rating.length,
+      created_at: tourism.created_at,
+      updated_at: tourism.updated_at,
+    }));
     res.json({
       status: 'success',
-      message: 'Get tourism successfully',
       data,
+    })
+  } catch (err) {
+    res.status(500).json({
+      status: 'error',
+      message: 'An error has occured.',
+      error: err.message
+    })
+  }
+}
+
+exports.getTourism = async (req, res) => {
+  try {
+    const tourism = await prisma.tourism.findUnique({
+      where: {
+        id: Number(req.params.tourismId)
+      },
+      include: {
+        tourism_rating: {
+          include: {
+            user: true
+          }
+        }
+      }
+    })
+    res.json({
+      status: 'success',
+      tourism,
     })
   } catch (err) {
     res.status(500).json({
