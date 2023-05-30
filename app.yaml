@@ -1,0 +1,11 @@
+runtime: nodejs
+service: backend
+
+env_variables:
+  NODE_ENV: development
+  PORT: 3000
+  DATABASE_URL: "mysql://root:root@34.101.157.132:3306/db_tourism"
+  SESSION_KEY: random-word
+
+  JWT_KEY: 3a8f02f0-9c96-4ff1-8d70-ef7851e84367
+  JWT_EXPIRES_IN: 60d
