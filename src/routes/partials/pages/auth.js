@@ -5,6 +5,6 @@ const router = Router()
 
 router.get('/login', index)
 router.post('/login', login)
-router.post('/logout', logout)
+router.get('/logout', logout)
 
 module.exports = router
