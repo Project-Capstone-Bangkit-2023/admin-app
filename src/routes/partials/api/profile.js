@@ -5,7 +5,7 @@ const { authenticatedMiddleware } = require('../../../middlewares/authenticated'
 const router = Router()
 
 router.use(authenticatedMiddleware);
-router.route('/:userId').get(getProfile);
+router.route('/:email').get(getProfile);
 router.route('/:userId/update').post(updateProfile);
 
 module.exports = router

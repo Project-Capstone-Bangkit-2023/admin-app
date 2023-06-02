@@ -4,9 +4,9 @@ const prisma = new PrismaClient()
 
 exports.getProfile = async (req, res) => {
     try {
-        const user = await prisma.user.findUnique({
+        const user = await prisma.user.findFirst({
             where: {
-                id: Number(req.params.userId),
+                email: req.params.email,
             },
         })
         res.json({
