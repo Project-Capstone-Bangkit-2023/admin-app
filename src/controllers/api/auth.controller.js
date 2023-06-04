@@ -67,7 +67,7 @@ exports.register = async (req, res) => {
                 name: req.body.name,
                 email: req.body.email,
                 location: req.body.location,
-                age: req.body.age,
+                age: Number(req.body.age),
                 cat_pref: req.body.cat_pref,
             },
         });
