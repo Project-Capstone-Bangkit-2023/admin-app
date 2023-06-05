@@ -1,0 +1,163 @@
+<h3>Tourisms List</h3>
+
+<div class="text-end mb-4">
+  <a
+    href="#"
+    data-bs-toggle="modal"
+    data-bs-target="#tourism-modal"
+    class="btn btn-primary"
+  >Tambah Tourism</a>
+</div>
+<div class="card">
+  <div class="card-body">
+    <table class="table table-bordered data-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Place Name</th>
+          <th>City</th>
+          <th>Category</th>
+          <th>Price</th>
+          <th>Rating</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each tourisms}}
+          <tr>
+            <td>{{@index}}</td>
+            <td>{{this.name}}</td>
+            <td>{{this.city}}</td>
+            <td>{{this.category}}</td>
+            <td>{{this.price}}</td>
+            <td>{{this.rating}}</td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="tourism-modal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <form action="" method="POST" enctype="multipart/form-data">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Tambah Tourism</h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group mb-3">
+            <label for="">Nama Tempat Wisata</label>
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Masukkan nama tempat wisata"
+              name="name"
+              required
+            />
+          </div>
+          <div class="form-group mb-3">
+            <label for="">Foto Wisata</label>
+            <input
+              type="file"
+              class="form-control"
+              placeholder=""
+              name="file"
+            />
+          </div>
+          <div class="form-group mb-3">
+            <label for="">Deskripsi</label>
+            <textarea
+              class="form-control"
+              name="description"
+              id=""
+              cols="30"
+              rows="10"
+              required
+            ></textarea>
+          </div>
+          <div class="form-group mb-3">
+            <label for="">Kategori</label>
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Masukkan kategori tempat wisata"
+              name="category"
+              required
+            />
+          </div>
+          <div class="form-group mb-3">
+            <label for="">Kota</label>
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Masukkan nama kota tempat wisata"
+              name="city"
+              required
+            />
+          </div>
+          <div class="form-group mb-3">
+            <label for="">Harga Tiket Masuk</label>
+            <input
+              type="number"
+              class="form-control"
+              placeholder="Masukkan harga tiket masuk"
+              name="price"
+              required
+            />
+          </div>
+          <div class="form-group mb-3">
+            <label for="">Titik Koordinat</label>
+            <div class="row">
+              <div class="col-6">
+                <div class="form-group">
+                  <label for="latitude">Latitude</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Masukkan latitude lokasi"
+                    name="latitude"
+                    id=""
+                    required
+                  />
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="form-group">
+                  <label for="longitude">Longitude</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Masukkan longitude lokasi"
+                    name="longitude"
+                    id=""
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >Close</button>
+          <button type="submit" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
