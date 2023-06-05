@@ -6,7 +6,7 @@ const { PrismaClient } = require('@prisma/client')
 const bucketName = process.env.BUCKET_NAME
 const gcloudProject = process.env.GCLOUD_PROJECT_ID
 const serviceAccountEmail = process.env.GCLOUD_SERVICE_ACCOUNT_EMAIL
-const keyFile = path.join(__dirname, '..', '..', '..', 'powerful-host-381408-134c454c8927.json')
+const keyFile = path.join(__dirname, '..', '..', '..', 'service-account.json')
 
 const prisma = new PrismaClient()
 const storage = new Storage({
