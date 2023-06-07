@@ -13,7 +13,7 @@ exports.getUsers = async (req, res) => {
         }
       }
     })
-    res.render('user', {
+    res.render('user/index', {
       users
     })
   } catch (err) {

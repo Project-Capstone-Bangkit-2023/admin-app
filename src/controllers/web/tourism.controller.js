@@ -33,13 +33,15 @@ exports.createTourism = async (req, res) => {
   try {
 
     const bucket = storage.bucket(bucketName)
-    const localPath = req.file.path
-    const destinationFileName = generateRandomFileName(req.file.originalname)
+    let destinationFileName = 'default.png';
+    if (typeof req.file != 'undefined') {
+      const localPath = req.file.path
+      destinationFileName = generateRandomFileName(req.file.originalname)
 
-    await bucket.upload(localPath, {
-      destination: `places/${destinationFileName}`
-    })
-
+      await bucket.upload(localPath, {
+        destination: `places/${destinationFileName}`
+      })
+    }
     const tourism = await prisma.tourism.create({
       data: {
         name: req.body.name,
@@ -61,7 +63,90 @@ exports.createTourism = async (req, res) => {
       message: 'An error has occured.',
       error: err.message
     })
-  } 
+  }
+}
+
+exports.editTourism = async (req, res) => {
+  try {
+    const tourism = await prisma.tourism.findUnique({
+      where: {
+        id: Number(req.params.tourismId)
+      }
+    })
+    res.render('tourisms/form', {
+      tourism,
+    })
+  } catch (err) {
+    res.status(500).json({
+      status: 'error',
+      message: 'An error has occured.',
+      error: err.message,
+    })
+  }
+}
+
+exports.updateTourism = async (req, res) => {
+  try {
+
+    const findTourism = await prisma.tourism.findUnique({ where: { id: Number(req.params.tourismId) } });
+    const bucket = storage.bucket(bucketName)
+    let destinationFileName = findTourism.picture;
+    if (typeof req.file != 'undefined' && findTourism.picture != 'default.png') {
+      const localPath = req.file.path
+      destinationFileName = generateRandomFileName(req.file.originalname)
+      await bucket.file(`places/${findTourism.picture}`).delete();
+      await bucket.upload(localPath, {
+        destination: `places/${destinationFileName}`
+      })
+    }
+
+    const tourism = await prisma.tourism.update({
+      where: { id: Number(req.params.tourismId) },
+      data: {
+        name: req.body.name,
+        picture: destinationFileName,
+        description: req.body.description,
+        category: req.body.category,
+        city: req.body.city,
+        price: Number(req.body.price),
+        rating: 0,
+        latitude: req.body.latitude,
+        longitude: req.body.longitude,
+      }
+    })
+
+    res.redirect('/tourisms')
+  } catch (err) {
+    res.status(500).json({
+      status: 'error',
+      message: 'An error has occured.',
+      error: err.message
+    })
+  }
+}
+
+exports.deleteTourism = async (req, res) => {
+  try {
+
+    const bucket = storage.bucket(bucketName)
+
+    const deleteTourism = await prisma.tourism.delete({
+      where: {
+        id: Number(req.params.tourismId),
+      },
+    });
+    if (deleteTourism.picture != 'default.png') {
+      await bucket.file(`places/${deleteTourism.picture}`).delete();
+    }
+
+    res.redirect('/tourisms')
+  } catch (err) {
+    res.status(500).json({
+      status: 'error',
+      message: 'An error has occured.',
+      error: err.message
+    })
+  }
 }
 
 function generateRandomNumber(min, max) {
