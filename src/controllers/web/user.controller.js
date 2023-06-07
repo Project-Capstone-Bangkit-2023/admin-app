@@ -24,7 +24,3 @@ exports.getUsers = async (req, res) => {
     })
   }
 }
-
-exports.createTourism = async (req, res) => {
-
-}
