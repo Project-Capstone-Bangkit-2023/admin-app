@@ -7,6 +7,9 @@ const profileApiRouter = require('./partials/api/profile')
 const tourismRouter = require('./partials/pages/tourisms')
 const userRouter = require('./partials/pages/user')
 
+const { populateDummyUser } = require('../controllers/debug/user.controller')
+const protectDebug = require('../middlewares/protect-debug')
+
 exports.initRouter = app => {
   app.use('/auth', authRouter)
   app.use('/', dashboardRouter)
@@ -19,4 +22,6 @@ exports.initRouter = app => {
   app.use('/api/v1/categories', categoryApiRouter)
   app.use('/api/v1/tourisms', tourismApiRouter)
   app.use('/api/v1/profile', profileApiRouter)
+
+  app.get('/api/v1/populate-user', protectDebug, populateDummyUser)
 }
