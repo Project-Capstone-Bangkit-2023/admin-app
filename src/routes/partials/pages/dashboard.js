@@ -1,12 +1,11 @@
 const { Router } = require('express')
+const { index } = require('./../../../controllers/web/dashboard.controller')
 const authGuardMiddleware = require('../../../middlewares/auth-guard')
 
 const router = Router()
 
 router.use(authGuardMiddleware)
 
-router.get('/', (req, res) => {
-  res.render('dashboard')
-})
+router.get('/', index)
 
 module.exports = router

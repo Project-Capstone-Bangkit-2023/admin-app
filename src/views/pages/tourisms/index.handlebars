@@ -40,12 +40,11 @@
             <td>
               <a
                 href="/tourisms/edit/{{this.id}}"
-                onclick="confi"
                 class="btn btn-outline-primary btn-sm waves-effect waves-light"
               ><i class="las la-edit"></i></a>
               <a
                 href="/tourisms/delete/{{this.id}}"
-                onclick="confirm('Are you sure delete this data ?')"
+                onclick="return confirm('Are you sure delete this data ?')"
                 class="btn btn-outline-danger btn-sm waves-effect waves-light"
               ><i class="las la-trash-alt"></i></a>
             </td>
