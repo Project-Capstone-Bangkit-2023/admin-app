@@ -88,9 +88,14 @@ exports.getRecommendations = async (req, res) => {
   const arr = Array.from(values)
   const sortedArr = Array.from(arr.keys()).sort((a, b) => arr[a] - arr[b])
 
+  let data = [];
   for (let i = 0; i < 10; i++) {
-    console.log(rawTourismsArr[sortedArr[i]])
+    data.push(rawTourismsArr[sortedArr[i]])
   }
+  res.json({
+    status: 'success',
+    data,
+  })
 }
 
 exports.getTourisms = async (req, res) => {
