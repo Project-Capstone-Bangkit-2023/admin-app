@@ -1,6 +1,7 @@
 const path = require('path')
 const tf = require('@tensorflow/tfjs-node')
 const { PrismaClient } = require('@prisma/client')
+const { decode } = require('jsonwebtoken');
 
 const prisma = new PrismaClient()
 
@@ -22,11 +23,47 @@ const updateAvgRatingOnTourism = async tourism_id => {
 
 exports.getRecommendations = async (req, res) => {
 
-  const rawTourisms = tf.data.csv(`file://${path.resolve(__dirname, 'tourisms.csv')}`) // <-- Ambil data dari database
-  const dataTourism = tf.data.csv(`file://${path.resolve(__dirname, 'data.csv')}`) // <-- Ambil data dari database
-  const dataUser = tf.data.csv(`file://${path.resolve(__dirname, 'user.csv')}`) // <-- Ambil data dari database
+  const user = decode(
+    req.headers.authorization.split(' ')[1]
+  );
+  const rawTourisms = prisma.tourism.findMany()
+  const dataTourism = prisma.$queryRaw`SELECT 
+    (CASE WHEN tourisms.category = "Budaya" THEN 1 ELSE 0 END) AS "Budaya",
+    (CASE WHEN tourisms.category = "Taman Hiburan" THEN 1 ELSE 0 END) AS "Taman Hiburan",
+    (CASE WHEN tourisms.category = "Cagar Alam" THEN 1 ELSE 0 END) AS "Cagar Alam",
+    (CASE WHEN tourisms.category = "Bahari" THEN 1 ELSE 0 END) AS "Bahari",
+    (CASE WHEN tourisms.category = "Pusat Perbelanjaan" THEN 1 ELSE 0 END) AS "Pusat Perbelanjaan",
+    (CASE WHEN tourisms.category = "Tempat Ibadah" THEN 1 ELSE 0 END) AS "Tempat Ibadah",
+    tourisms.rating,
+    COUNT(tourism_ratings.rating)
+    
+    FROM tourisms
+    INNER JOIN tourism_ratings
+    ON tourism_ratings.tourism_id = tourisms.id
+    
+    GROUP BY tourisms.id;`
 
-  const [ tourisms, resultUser, rawTourismsArr ] = await Promise.all([dataTourism.toArray(), dataUser.toArray(), rawTourisms.toArray()])
+  const dataUser = prisma.$queryRaw`SELECT 
+    COALESCE(MAX(IF(category = "Budaya",  average, null)), 3) AS "Budaya",
+    COALESCE(MAX(IF(category = "Taman Hiburan",  average, null)), 3) AS "Taman Hiburan",
+    COALESCE(MAX(IF(category = "Cagar Alam",  average, null)), 3) AS "Cagar Alam",
+    COALESCE(MAX(IF(category = "Bahari", average, null)), 3) AS "Bahari",
+    COALESCE(MAX(IF(category = "Pusat Perbelanjaan", average, null)), 3) AS "Pusat Perbelanjaan",
+    COALESCE(MAX(IF(category = "Tempat Ibadah", average, null)), 3) AS "Tempat Ibadah"
+      
+      
+    FROM (SELECT tourism_ratings.user_id, tourisms.category, AVG(tourism_ratings.rating) as average
+        FROM tourisms
+        INNER JOIN tourism_ratings
+        ON tourism_ratings.tourism_id = tourisms.id
+        
+        WHERE tourism_ratings.user_id = ${user.id}
+            
+        GROUP BY tourisms.category) AS user_avg
+        
+    GROUP BY user_id;`
+
+  const [tourisms, resultUser, rawTourismsArr] = await Promise.all([dataTourism, dataUser, rawTourisms])
 
   let newUser = []
 
@@ -37,8 +74,8 @@ exports.getRecommendations = async (req, res) => {
   }
 
   const resultTourism = tourisms.map(d => {
-    const val= Object.values(d)
-    val[6] = (val[6]-3) / 2
+    const val = Object.values(d)
+    val[6] = (val[6] - 3) / 2
     val[7] = val[6] / 50
     return val
   })

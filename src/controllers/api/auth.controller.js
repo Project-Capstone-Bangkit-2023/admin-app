@@ -7,6 +7,7 @@ const generateJwtToken = async user => {
 
     // Payload jwt
     const jwtTokenPayload = {
+        id: user.id,
         name: user.name,
         email: user.email,
         location: user.location,
