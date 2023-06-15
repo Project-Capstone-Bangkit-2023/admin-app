@@ -79,7 +79,16 @@ exports.getRecommendations = async (req, res) => {
       const val = Object.values(d)
       val[6] = (val[6] - 3) / 2
       val[7] = val[6] / 50
-      return val
+      let modifiedArr = val.map(element => {
+        if (typeof element === 'bigint') {
+          let num = element.toString().replace('n', '');
+          return Number(num);
+        } else {
+          return element;
+        }
+      })
+
+      return modifiedArr
     })
 
     const model = await tf.loadLayersModel(`file://${path.resolve(__dirname, 'models', 'model.json')}`)
