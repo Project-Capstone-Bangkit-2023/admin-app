@@ -65,7 +65,7 @@ exports.getRecommendations = async (req, res) => {
 
   const [tourisms, resultUser, rawTourismsArr] = await Promise.all([dataTourism, dataUser, rawTourisms])
 
-  if (dataUser != null) {
+  if ((await dataUser).length) {
     let data = [];
     let newUser = []
 
@@ -110,9 +110,7 @@ exports.getRecommendations = async (req, res) => {
     })
   } else {
     let data = await prisma.tourism.findMany({
-      orderBy: {
-        random: true,
-      },
+      take: 10
     })
     data = data.map((tourism) => ({
       id: tourism.id,
@@ -125,7 +123,7 @@ exports.getRecommendations = async (req, res) => {
       rating: tourism.rating,
       latitude: tourism.latitude,
       longitude: tourism.longitude,
-      countRating: tourism.tourism_rating.length,
+      countRating: tourism.tourism_rating ? tourism.tourism_rating.length : 0,
       created_at: tourism.created_at,
       updated_at: tourism.updated_at,
     }));
