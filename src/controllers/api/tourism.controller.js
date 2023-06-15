@@ -91,7 +91,9 @@ exports.getRecommendations = async (req, res) => {
       return modifiedArr
     })
 
-    const model = await tf.loadLayersModel(`file://${path.resolve(__dirname, 'models', 'model.json')}`)
+    // console.log(path.join(__dirname, 'models', '..', '..', '..', '..', 'tfjs-model', 'model.json'))
+
+    const model = await tf.loadLayersModel(`file://${path.join(__dirname, 'models', '..', '..', '..', '..', 'tfjs-model', 'model.json')}`)
     const inputTf = tf.tensor2d(newUser, [newUser.length, newUser[0].length])
     const inputTf2 = tf.tensor2d(resultTourism, [resultTourism.length, resultTourism[0].length])
     const output = model.predict([inputTf, inputTf2])

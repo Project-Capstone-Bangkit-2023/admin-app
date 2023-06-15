@@ -8,4 +8,4 @@ dotenv.config({
 
 const port = process.env.PORT || 3000
 
-require('./app').listen(port, onServerListening(port))
+require('./app').listen(port, onServerListening(port)).setTimeout(50000)
