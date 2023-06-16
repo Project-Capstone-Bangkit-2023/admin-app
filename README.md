@@ -6,6 +6,9 @@ This backend is for Bangkit 2023 Capstone Project Submission.
 * ExpressJS
 * Prisma
 
+## API Documentation
+You can access the API Documentation [here](https://documenter.getpostman.com/view/8393465/2s93shyV29)
+
 ## Setup & Installation
 
 1. Clone this repository
